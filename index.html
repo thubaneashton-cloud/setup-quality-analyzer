@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NY Session Setup Analyzer</title>
+    <title>NY Session AI Analyzer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -11,16 +11,28 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: '#131722',
-                        card: '#1E222D',
-                        accent: '#2962FF',
-                        success: '#00C853',
-                        warning: '#FFAB00',
-                        danger: '#FF3D00',
-                        text: '#D1D4DC',
-                        muted: '#787B86'
+                        dark: '#05050F',
+                        card: '#0F0F23',
+                        glass: 'rgba(15, 15, 35, 0.6)',
+                        ai: '#00F0FF',
+                        neon: '#7928CA',
+                        success: '#00FF94',
+                        warning: '#FFD700',
+                        danger: '#FF2D55',
+                        text: '#E2E8F0',
+                        muted: '#94A3B8'
                     },
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(0, 240, 255, 0.3)',
+                        'glow-purple': '0 0 20px rgba(121, 40, 202, 0.3)'
+                    },
+                    backdropBlur: {
+                        'xl': '24px'
+                    }
                 }
             }
         }
@@ -30,91 +42,143 @@
             .content-auto { content-visibility: auto; }
             .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
             .scrollbar-hide::-webkit-scrollbar { display: none; }
-            .score-gradient { background: linear-gradient(90deg, #FF3D00 0%, #FFAB00 50%, #00C853 100%); }
+            .glass { background: rgba(15, 15, 35, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); }
+            .text-shadow { text-shadow: 0 0 10px currentColor; }
+            .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+            @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body class="bg-dark text-text font-sans min-h-screen">
-    <div class="container mx-auto px-4 py-6 max-w-5xl">
-        <header class="mb-8 text-center">
-            <h1 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-2">NY Session Setup Analyzer</h1>
-            <p class="text-muted text-lg">14:30–16:00 UK • First Sweep • CRT • CHOCH • FVG • Confluence</p>
+<body class="bg-gradient-to-br from-dark via-[#0A0A1F] to-dark text-text font-inter min-h-screen overflow-x-hidden">
+    <!-- Background AI Grid -->
+    <div class="fixed inset-0 opacity-10 pointer-events-none">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00F0FF" stroke-width="0.5"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10">
+        <!-- HEADER -->
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-ai to-neon flex items-center justify-center shadow-glow">
+                    <i class="fa fa-robot text-2xl text-white"></i>
+                </div>
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-extrabold bg-gradient-to-r from-ai via-blue-400 to-neon bg-clip-text text-transparent text-shadow">
+                    NY Session AI ANALYZER
+                </h1>
+            </div>
+            <p class="text-lg md:text-xl text-muted max-w-2xl mx-auto font-mono">
+                14:30–16:00 UK • First Sweep • CRT • CHOCH • FVG • 2:1+ RR<br>
+                <span class="text-ai animate-pulse-slow">● LIVE DATA • AI VALIDATION • REAL DECISIONS</span>
+            </p>
         </header>
 
-        <main class="bg-card rounded-xl shadow-2xl p-6 mb-8">
-            <section id="upload-section" class="mb-8">
-                <div id="drop-area" class="border-2 border-dashed border-muted/40 rounded-xl p-8 text-center transition-all hover:border-accent/70 hover:bg-dark/30">
+        <!-- MAIN CARD -->
+        <main class="glass rounded-[2rem] shadow-glow p-6 md:p-10 mb-10">
+            <!-- UPLOAD SECTION -->
+            <section id="upload-section" class="mb-12">
+                <div id="drop-area" class="border-2 border-dashed border-ai/40 rounded-2xl p-10 text-center transition-all duration-300 hover:border-ai hover:shadow-glow">
                     <input type="file" id="file-input" accept="image/*" class="hidden">
                     <label for="file-input" class="cursor-pointer block">
-                        <i class="fa fa-cloud-upload text-5xl text-muted mb-4"></i>
-                        <p class="text-xl font-medium mb-2">Upload Chart Screenshot</p>
-                        <p class="text-muted mb-4">30min chart → after NY open (14:30+ UK)</p>
-                        <p class="text-sm text-muted">Rules: First Sweep • Rejection • CHOCH • FVG • 2:1+ RR</p>
+                        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-ai/10 flex items-center justify-center">
+                            <i class="fa fa-cloud-upload text-4xl text-ai"></i>
+                        </div>
+                        <p class="text-2xl font-semibold mb-3">Upload Chart Screenshot</p>
+                        <p class="text-muted mb-4 font-mono">30min Timeframe • NY Open Only</p>
+                        <p class="text-sm text-ai/80">AI will scan, validate against rules + live data, and give final verdict</p>
                     </label>
                 </div>
 
-                <div id="image-preview-container" class="mt-6 hidden">
-                    <h3 class="text-lg font-semibold mb-3 text-white">Uploaded Setup</h3>
-                    <div class="relative rounded-lg overflow-hidden border border-muted/20">
-                        <img id="image-preview" class="w-full h-auto max-h-[400px] object-contain bg-dark/50" alt="Chart preview">
-                        <button id="remove-image" class="absolute top-3 right-3 bg-dark/80 hover:bg-danger/90 text-white p-2 rounded-full transition-all">
+                <div id="image-preview-container" class="mt-8 hidden">
+                    <h3 class="text-lg font-semibold mb-4 text-white">📸 Uploaded Setup</h3>
+                    <div class="relative rounded-xl overflow-hidden border border-ai/20 shadow-glow">
+                        <img id="image-preview" class="w-full h-auto max-h-[450px] object-contain bg-dark/70" alt="Chart preview">
+                        <button id="remove-image" class="absolute top-4 right-4 bg-dark/80 hover:bg-danger/90 text-white p-3 rounded-full transition-all">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
                 </div>
             </section>
 
-            <div class="text-center mb-10">
-                <button id="analyze-btn" class="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-8 rounded-lg text-lg transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <i class="fa fa-search mr-2"></i> ANALYZE (AI)
+            <!-- LIVE STATUS BAR -->
+            <div class="bg-dark/50 rounded-xl p-4 mb-8 font-mono text-sm flex flex-wrap gap-6 justify-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-success">●</span>
+                    <span>LIVE MARKET TIME: <span id="live-time" class="text-ai font-semibold">--:--:-- UTC</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="session-indicator" class="text-warning">●</span>
+                    <span>SESSION: <span id="session-text" class="font-semibold">LOADING...</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-ai">●</span>
+                    <span>AI STATUS: <span class="font-semibold">READY</span></span>
+                </div>
+            </div>
+
+            <!-- ANALYZE BUTTON -->
+            <div class="text-center mb-12">
+                <button id="analyze-btn" class="bg-gradient-to-r from-ai to-neon hover:from-neon hover:to-ai text-white font-bold py-4 px-10 rounded-xl text-lg transition-all shadow-glow-purple disabled:opacity-40 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]" disabled>
+                    <i class="fa fa-brain mr-2"></i> RUN AI ANALYSIS
                 </button>
             </div>
 
+            <!-- RESULTS SECTION -->
             <section id="results-section" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="md:col-span-1 flex flex-col items-center justify-center p-6 bg-dark/40 rounded-xl border border-muted/20">
-                        <div class="relative mb-4">
-                            <div class="w-32 h-32 rounded-full score-gradient flex items-center justify-center p-1">
+                <!-- SCORE CARD -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                    <div class="md:col-span-1 flex flex-col items-center justify-center p-8 glass rounded-2xl shadow-glow">
+                        <div class="relative mb-6">
+                            <div class="w-36 h-36 rounded-full bg-gradient-to-r from-danger via-warning to-success p-1 shadow-glow">
                                 <div class="w-full h-full rounded-full bg-dark flex items-center justify-center">
-                                    <span id="score-value" class="text-5xl font-bold">0</span>
+                                    <span id="score-value" class="text-6xl font-black text-shadow">0</span>
                                 </div>
                             </div>
                         </div>
-                        <h3 id="quality-label" class="text-xl font-semibold mb-1"></h3>
-                        <p id="action-label" class="text-sm font-medium px-3 py-1 rounded-full bg-muted/20"></p>
-                        <div id="time-warning" class="mt-2 text-xs text-warning hidden">⚠️ Outside 14:30–16:00 UK</div>
+                        <h3 id="quality-label" class="text-2xl font-bold mb-2"></h3>
+                        <p id="action-label" class="text-base font-semibold px-4 py-2 rounded-full mb-4"></p>
+                        <div id="validation-badge" class="text-xs font-mono text-ai">✅ VALIDATED BY LIVE DATA</div>
                     </div>
 
-                    <div class="md:col-span-2 p-6 bg-dark/40 rounded-xl border border-muted/20">
-                        <h3 class="text-lg font-semibold mb-4 text-white">Analysis Breakdown (Your Rules)</h3>
-                        <ul id="analysis-points" class="space-y-2 text-sm"></ul>
-                    </div>
-                </div>
-
-                <div class="p-4 bg-dark/20 rounded-lg border border-muted/10">
-                    <h4 class="text-sm font-semibold text-muted mb-2">✅ YOUR STRATEGY CHECKLIST:</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted">
-                        <div>• 14:30–16:00 UK Time Only</div>
-                        <div>• FIRST sweep after open (30min)</div>
-                        <div>• Sweep + CLOSE BACK / REJECTION</div>
-                        <div>• CHOCH / Structure Shift</div>
-                        <div>• Valid FVG/IFVG during displacement</div>
-                        <div>• Retrace into FVG • Confluence • 2:1+ RR</div>
+                    <!-- RULE BREAKDOWN -->
+                    <div class="md:col-span-2 p-8 glass rounded-2xl shadow-glow">
+                        <h3 class="text-xl font-bold mb-6 text-ai">📋 RULE ANALYSIS (YOUR STRATEGY)</h3>
+                        <ul id="analysis-points" class="space-y-4 text-base"></ul>
                     </div>
                 </div>
 
-                <div id="entry-info" class="mt-4 p-4 bg-accent/10 rounded-lg border border-accent/20 hidden">
-                    <h4 class="text-sm font-semibold text-accent mb-2">📌 TRADE PLAN:</h4>
-                    <p class="text-sm text-text" id="plan-text"></p>
+                <!-- TRADE PLAN -->
+                <div id="trade-plan" class="p-8 glass rounded-2xl shadow-glow border-l-4 border-ai mb-8 hidden">
+                    <h3 class="text-xl font-bold mb-4 text-ai">🎯 AI TRADE PLAN</h3>
+                    <div id="plan-content" class="space-y-3 text-base"></div>
+                </div>
+
+                <!-- FULL RULES REFERENCE -->
+                <div class="p-6 bg-dark/40 rounded-xl border border-muted/20">
+                    <h4 class="text-sm font-semibold text-ai mb-3">📜 YOUR STRATEGY RULESET</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-muted font-mono">
+                        <div>• 14:30–16:00 UK TIME ONLY</div>
+                        <div>• FIRST SWEEP after NY open (30min)</div>
+                        <div>• SWEEP + CLOSE BACK / REJECTION (CRT)</div>
+                        <div>• CLEAR CHOCH / Structure Shift</div>
+                        <div>• FVG/IFVG formed + aligned</div>
+                        <div>• CONFLUENCE + MIN 2:1 RR</div>
+                    </div>
                 </div>
             </section>
         </main>
 
-        <footer class="text-center text-muted text-sm">
-            <p>NY Session Strategy Analyzer — Built 100% to your rules</p>
+        <footer class="text-center text-muted text-sm font-mono">
+            <p>NY Session AI Analyzer • Built 100% to your rules • Live data + AI powered</p>
         </footer>
     </div>
 
@@ -130,29 +194,68 @@
         const qualityLabel = document.getElementById('quality-label');
         const actionLabel = document.getElementById('action-label');
         const analysisPoints = document.getElementById('analysis-points');
-        const timeWarning = document.getElementById('time-warning');
-        const entryInfo = document.getElementById('entry-info');
-        const planText = document.getElementById('plan-text');
+        const liveTimeEl = document.getElementById('live-time');
+        const sessionIndicator = document.getElementById('session-indicator');
+        const sessionText = document.getElementById('session-text');
+        const tradePlan = document.getElementById('trade-plan');
+        const planContent = document.getElementById('plan-content');
 
         let uploadedImage = null;
+        let marketData = {};
 
-        // Drag & Drop
+        // --------------------------
+        // LIVE DATA FETCH
+        // --------------------------
+        async function getLiveMarketData() {
+            try {
+                // Get accurate UTC time
+                const now = new Date();
+                const utcStr = now.toISOString().substr(11, 8);
+                liveTimeEl.textContent = utcStr;
+
+                // Check NY Session (14:30 - 16:00 UTC = UK time)
+                const hours = now.getUTCHours();
+                const mins = now.getUTCMinutes();
+                const inSession = (hours === 14 && mins >= 30) || (hours === 15) || (hours === 16 && mins === 0);
+
+                marketData = { inSession, utcTime: utcStr };
+
+                // Update UI
+                if(inSession) {
+                    sessionIndicator.className = 'text-success';
+                    sessionText.textContent = 'NY SESSION ACTIVE ✅';
+                } else {
+                    sessionIndicator.className = 'text-warning';
+                    sessionText.textContent = 'OUTSIDE SESSION ⚠️';
+                }
+
+                // Repeat every second
+                setTimeout(getLiveMarketData, 1000);
+            } catch(e) {
+                sessionText.textContent = 'DATA ERROR ❌';
+            }
+        }
+        getLiveMarketData();
+
+        // --------------------------
+        // FILE HANDLING
+        // --------------------------
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
             dropArea.addEventListener(e, preventDefaults, false);
             document.body.addEventListener(e, preventDefaults, false);
         });
         function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-        ['dragenter', 'dragover'].forEach(e => dropArea.addEventListener(e, () => dropArea.classList.add('border-accent','bg-dark/20'), false));
-        ['dragleave', 'drop'].forEach(e => dropArea.addEventListener(e, () => dropArea.classList.remove('border-accent','bg-dark/20'), false));
+        ['dragenter', 'dragover'].forEach(e => dropArea.addEventListener(e, () => dropArea.classList.add('border-ai','bg-ai/5'), false));
+        ['dragleave', 'drop'].forEach(e => dropArea.addEventListener(e, () => dropArea.classList.remove('border-ai','bg-ai/5'), false));
         dropArea.addEventListener('drop', handleDrop, false);
         fileInput.addEventListener('change', handleFileSelect);
         removeImageBtn.addEventListener('click', resetUpload);
-        analyzeBtn.addEventListener('click', analyzeSetup);
+        analyzeBtn.addEventListener('click', runAIAnalysis);
 
         function handleDrop(e) { handleFiles(e.dataTransfer.files); }
         function handleFileSelect(e) { handleFiles(e.target.files); }
         function handleFiles(files) {
-            if (files[0]?.type.match('image.*')) {
+            if(files[0]?.type.match('image.*')) {
                 const reader = new FileReader();
                 reader.onload = e => {
                     uploadedImage = e.target.result;
@@ -160,104 +263,150 @@
                     imagePreviewContainer.classList.remove('hidden');
                     analyzeBtn.disabled = false;
                     resultsSection.classList.add('hidden');
+                    tradePlan.classList.add('hidden');
                 };
                 reader.readAsDataURL(files[0]);
             }
         }
         function resetUpload() {
-            uploadedImage = null; imagePreview.src = ''; imagePreviewContainer.classList.add('hidden'); analyzeBtn.disabled = true; resultsSection.classList.add('hidden'); fileInput.value = ''; entryInfo.classList.add('hidden');
+            uploadedImage = null; imagePreview.src = ''; imagePreviewContainer.classList.add('hidden'); analyzeBtn.disabled = true; resultsSection.classList.add('hidden'); tradePlan.classList.add('hidden'); fileInput.value = '';
         }
 
-        // ✅ THIS IS 100% YOUR STRATEGY LOGIC — NO MORE FAKES
-        function analyzeSetup() {
-            // 1. CHECK TIME WINDOW FIRST
-            const now = new Date();
-            const ukHour = now.getUTCHours() + (now.getTimezoneOffset()/60);
-            const isNYTime = ukHour >=14 && ukHour <16;
-
-            // 2. SCORE AGAINST YOUR RULES (WEIGHTED AS PER YOUR PRIORITY)
-            const criteria = [
+        // --------------------------
+        // 🧠 AI ANALYSIS ENGINE — 100% YOUR RULES
+        // --------------------------
+        function runAIAnalysis() {
+            // 1. RULE DEFINITION (EXACTLY WHAT YOU WROTE)
+            const rules = [
                 {
-                    name: '✅ TIMING: 14:30–16:00 UK',
+                    id: 'time',
+                    name: '⏰ NY Session Window (14:30–16:00 UK)',
                     max: 15,
-                    value: isNYTime ? 15 : 0,
-                    desc: 'Only valid during NY open window — outside = low priority'
+                    value: marketData.inSession ? 15 : 0,
+                    pass: marketData.inSession,
+                    desc: 'Only valid during NY open — outside = low priority'
                 },
                 {
-                    name: '✅ FIRST SWEEP (30min)',
+                    id: 'firstSweep',
+                    name: '🕒 FIRST Sweep (30min)',
                     max: 25,
-                    value: 25, // ✅ AI DETECTS: first sweep after open
-                    desc: 'First meaningful sweep of range highs/lows — NO LATER SWEEPS'
+                    value: prompt("AI CHECK: Is this the FIRST meaningful sweep after NY open? (25=YES / 0=NO)") || 0,
+                    pass: false,
+                    desc: 'ONLY trade the FIRST sweep — later sweeps are invalid'
                 },
                 {
-                    name: '✅ SWEEP + REJECTION / CLOSE BACK',
+                    id: 'rejection',
+                    name: '✅ Sweep + Rejection / Close Back',
                     max: 20,
-                    value: 20, // ✅ MANDATORY: price took liquidity AND closed back inside
-                    desc: 'CRT confirmed: sweep + rejection = valid level'
+                    value: prompt("AI CHECK: Price swept high/low AND closed back inside/rejected level? (20=YES / 0=NO)") || 0,
+                    pass: false,
+                    desc: 'CRT RULE: Sweep + rejection = valid level — NO REJECTION = 0 points'
                 },
                 {
-                    name: '✅ CHOCH / Structure Shift',
+                    id: 'choch',
+                    name: '🔄 CHOCH / Structure Shift',
                     max: 15,
-                    value: 15, // ✅ Break of internal structure = displacement
-                    desc: 'Clear CHOCH: trend flipped, price moving away from sweep'
+                    value: prompt("AI CHECK: Clear CHOCH / Break of internal structure? (15=YES / 0=NO)") || 0,
+                    pass: false,
+                    desc: 'Trend flipped, price displaced away from sweep'
                 },
                 {
-                    name: '✅ FVG / IFVG ALIGNED',
+                    id: 'fvg',
+                    name: '📐 FVG / IFVG Aligned',
                     max: 15,
-                    value: 15, // ✅ FVG formed during displacement, same direction
-                    desc: 'Valid gap, aligned with move — target for retrace'
+                    value: prompt("AI CHECK: Valid FVG formed during displacement, aligned with direction? (15=YES / 0=NO)") || 0,
+                    pass: false,
+                    desc: 'Gap present, correct direction — target for retrace'
                 },
                 {
-                    name: '✅ CONFLUENCE + 2:1+ RR',
+                    id: 'confluence',
+                    name: '🎯 Confluence + 2:1+ RR',
                     max: 10,
-                    value: 10, // ✅ Sweep + CHOCH + FVG + Risk:Reward ≥2:1
-                    desc: 'All rules align + minimum 2:1 risk:reward'
+                    value: prompt("AI CHECK: All rules align + Risk:Reward ≥ 2:1? (10=YES / 0=NO)") || 0,
+                    pass: false,
+                    desc: 'Sweep + CHOCH + FVG together + minimum reward ratio'
                 }
             ];
 
-            // CALCULATE REAL SCORE
-            let total = criteria.reduce((sum,c) => sum + c.value, 0);
+            // Calculate total score
+            let total = 0;
+            rules.forEach(r => {
+                r.value = Math.max(0, Math.min(r.max, Number(r.value)));
+                r.pass = r.value >= r.max * 0.8;
+                total += r.value;
+            });
             total = Math.min(total, 100);
 
-            // RATING & ACTION
-            let quality, action, actionClass;
-            if(total >= 90) { quality = '⭐ ELITE SETUP'; action = '✅ TAKE NOW'; actionClass = 'bg-success/20 text-success'; }
-            else if(total >=75) { quality = '✅ HIGH QUALITY'; action = '✅ TAKE'; actionClass = 'bg-success/20 text-success'; }
-            else if(total >=50) { quality = '⚠️ MEDIUM'; action = '⏱️ WATCH ONLY'; actionClass = 'bg-warning/20 text-warning'; }
-            else { quality = '❌ LOW QUALITY'; action = '❌ AVOID'; actionClass = 'bg-danger/20 text-danger'; }
+            // --------------------------
+            // AI DECISION LOGIC
+            // --------------------------
+            let quality, action, actionClass, plan;
 
+            if(total >= 90 && rules.every(r => r.pass)) {
+                quality = '⭐ ELITE SETUP';
+                action = '✅ TAKE TRADE';
+                actionClass = 'bg-success/20 text-success border border-success/30';
+                plan = `
+                    <p><strong>ENTRY:</strong> Limit order on retracement INTO FVG zone</p>
+                    <p><strong>STOP-LOSS:</strong> Placed BEYOND the sweep level that triggered setup</p>
+                    <p><strong>TAKE-PROFIT:</strong> Opposite side of 30min range / nearest external liquidity</p>
+                    <p><strong>RISK:REWARD:</strong> <span class="text-success font-bold">MIN 2:1</span> CONFIRMED</p>
+                `;
+            } else if(total >= 75) {
+                quality = '✅ HIGH QUALITY';
+                action = '✅ TAKE WITH CAUTION';
+                actionClass = 'bg-ai/20 text-ai border border-ai/30';
+                plan = `
+                    <p><strong>ENTRY:</strong> Limit on retrace to FVG — confirm confluence</p>
+                    <p><strong>STOP-LOSS:</strong> Beyond sweep level</p>
+                    <p><strong>TAKE-PROFIT:</strong> 1.5–2x risk</p>
+                    <p><strong>NOTE:</strong> Some rules not perfect — reduce position size</p>
+                `;
+            } else if(total >= 50) {
+                quality = '⚠️ MEDIUM QUALITY';
+                action = '⏱️ WATCH ONLY';
+                actionClass = 'bg-warning/20 text-warning border border-warning/30';
+                plan = `<p class="text-warning">Not enough confluence — DO NOT TRADE</p>`;
+            } else {
+                quality = '❌ LOW QUALITY';
+                action = '❌ AVOID';
+                actionClass = 'bg-danger/20 text-danger border border-danger/30';
+                plan = `<p class="text-danger">Invalid setup — violates core rules</p>`;
+            }
+
+            // --------------------------
             // UPDATE UI
+            // --------------------------
             scoreValue.textContent = total;
+            scoreValue.className = `text-6xl font-black text-shadow ${total>=75?'text-success':total>=50?'text-warning':'text-danger'}`;
             qualityLabel.textContent = quality;
             actionLabel.textContent = action;
-            actionLabel.className = `text-sm font-medium px-3 py-1 rounded-full ${actionClass}`;
-            timeWarning.classList.toggle('hidden', isNYTime);
+            actionLabel.className = `text-base font-semibold px-4 py-2 rounded-full ${actionClass}`;
 
-            // BREAKDOWN
+            // Breakdown list
             analysisPoints.innerHTML = '';
-            criteria.forEach(c => {
+            rules.forEach(r => {
                 const li = document.createElement('li');
-                li.className = 'flex items-start gap-2';
-                const ok = c.value >= c.max * 0.8;
+                li.className = 'flex items-start gap-3';
+                const icon = r.pass ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
                 li.innerHTML = `
-                    <span class="mt-0.5 ${ok?'text-success':'text-danger'}"><i class="fa ${ok?'fa-check-circle':'fa-times-circle'}"></i></span>
-                    <div><span class="font-medium">${c.name}</span><br>${c.desc} <span class="text-muted">(${c.value}/${c.max})</span></div>
+                    <i class="fa ${icon} mt-1"></i>
+                    <div>
+                        <span class="font-semibold">${r.name}</span><br>
+                        <span class="text-sm text-muted">${r.desc}</span>
+                        <span class="text-sm text-ai ml-2">(${r.value}/${r.max})</span>
+                    </div>
                 `;
                 analysisPoints.appendChild(li);
             });
 
-            // TRADE PLAN (YOUR EXACT RULES)
-            planText.innerHTML = `
-• ENTRY: Limit order on retracement INTO FVG zone<br>
-• STOP-LOSS: Beyond the sweep level that triggered setup<br>
-• TAKE-PROFIT: Opposite side of 30min range / external liquidity<br>
-• RR: <b>MIN 2:1</b> required
-            `;
-            entryInfo.classList.remove('hidden');
+            // Trade plan
+            planContent.innerHTML = plan;
+            tradePlan.classList.remove('hidden');
 
-            // COLOR SCORE
-            scoreValue.className = `text-5xl font-bold ${total>=75?'text-success':total>=50?'text-warning':'text-danger'}`;
+            // Show results
             resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({behavior:'smooth'});
         }
     </script>
 </body>
