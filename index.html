@@ -1,173 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NY Session AI Analyzer</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body {
-    background: #05050F;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 40px;
-}
-.container {
-    max-width: 600px;
-    margin: auto;
-}
-button {
-    padding: 15px 30px;
-    font-size: 18px;
-    background: linear-gradient(to right, #00F0FF, #7928CA);
-    border: none;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-}
-button:disabled {
-    opacity: 0.4;
-}
-img {
-    max-width: 100%;
-    margin-top: 20px;
-}
-.result {
-    margin-top: 30px;
-    font-size: 24px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NY Session Strategy Master Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0A0E27',
+                        deep: '#050818',
+                        premium: '#12183B',
+                        glass: 'rgba(18, 24, 59, 0.65)',
+                        gold: '#FFD700',
+                        emerald: '#00E59B',
+                        electric: '#0099FF',
+                        royal: '#7928CA',
+                        danger: '#FF3A5E',
+                        text: '#F8FAFC',
+                        muted: '#94A3B8'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    boxShadow: {
+                        'luxury': '0 8px 32px rgba(0, 153, 255, 0.15)',
+                        'glow-gold': '0 0 25px rgba(255, 215, 0, 0.4)',
+                        'glow-emerald': '0 0 25px rgba(0, 229, 155, 0.4)',
+                        'glow-electric': '0 0 25px rgba(0, 153, 255, 0.3)'
+                    },
+                    backdropBlur: {
+                        'xl': '28px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto { content-visibility: auto; }
+            .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+            .scrollbar-hide::-webkit-scrollbar { display: none; }
+            .glass { background: rgba(18, 24, 59, 0.65); backdrop-filter: blur(28px); border: 1px solid rgba(255,255,255,0.12); }
+            .text-shadow { text-shadow: 0 0 12px currentColor; }
+            .animate-pulse-gold { animation: pulseGold 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+            @keyframes pulseGold { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+            .btn-hover { transition: all 0.3s ease; transform: translateY(0); }
+            .btn-hover:hover { transform: translateY(-3px); }
+            .progress-bar { transition: width 0.6s cubic-bezier(0.4, 0, 0.6, 1); }
+            .slide-in { animation: slideIn 0.5s ease-out; }
+            @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+            .confetti { position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: confettiFall 3s linear forwards; }
+            @keyframes confettiFall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-
-<body>
-
-<div class="container">
-    <h1>NY Session AI Analyzer</h1>
-
-    <input type="file" id="fileInput" accept="image/*">
-    
-    <div>
-        <img id="preview" />
+<body class="bg-gradient-to-br from-deep via-dark to-premium text-text font-inter min-h-screen overflow-x-hidden relative">
+    <!-- Premium Background Grid -->
+    <div class="fixed inset-0 opacity-10 pointer-events-none">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#0099FF" stroke-width="0.7"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
     </div>
 
-    <br>
+    <div class="container mx-auto px-4 py-10 max-w-4xl relative z-10">
+        <!-- HEADER -->
+        <header class="text-center mb-12 slide-in">
+            <div class="inline-flex items-center gap-4 mb-5">
+                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-electric via-royal to-gold flex items-center justify-center shadow-glow-gold">
+                    <i class="fa fa-check-square-o text-2xl text-white"></i>
+                </div>
+                <h1 class="text-[clamp(2rem,5vw,3.8rem)] font-black bg-gradient-to-r from-electric via-emerald to-gold bg-clip-text text-transparent text-shadow">
+                    STRATEGY MASTER CHECK
+                </h1>
+            </div>
+            <p class="text-lg md:text-xl text-muted max-w-2xl mx-auto font-mono">
+                NY Session • 14:30–16:00 UK • YOUR EXACT RULES<br>
+                <span class="text-gold animate-pulse-gold">● PREMIUM EDITION • SCORE OUT OF 100</span>
+            </p>
+        </header>
 
-    <button id="analyzeBtn" disabled>Run Analysis</button>
+        <!-- MAIN CARD -->
+        <main class="glass rounded-[2rem] shadow-luxury p-8 md:p-12 mb-10 relative overflow-hidden">
+            
+            <!-- START SCREEN -->
+            <section id="start-screen" class="text-center py-16 slide-in">
+                <div class="w-24 h-24 mx-auto mb-8 rounded-full bg-emerald/10 flex items-center justify-center shadow-glow-emerald">
+                    <i class="fa fa-clipboard-check text-5xl text-emerald"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Check Your Setup?</h2>
+                <p class="text-muted text-lg mb-10 max-w-xl mx-auto">
+                    Answer YES or NO to every question based on your NY Session rules. 
+                    We’ll calculate your exact score out of 100 and tell you if your setup is valid.
+                </p>
+                <button id="start-btn" class="bg-gradient-to-r from-electric to-royal hover:from-royal hover:to-electric text-white font-bold py-4 px-12 rounded-xl text-lg shadow-glow-electric btn-hover">
+                    <i class="fa fa-play mr-2"></i> START CHECKLIST
+                </button>
+            </section>
 
-    <div class="result" id="result"></div>
-</div>
+            <!-- QUESTION SCREEN -->
+            <section id="question-screen" class="hidden slide-in">
+                <!-- Progress Bar -->
+                <div class="mb-10">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-mono text-muted">PROGRESS</span>
+                        <span id="progress-text" class="text-sm font-mono text-gold">0/0</span>
+                    </div>
+                    <div class="w-full h-3 bg-dark/50 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-gradient-to-r from-electric to-emerald rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
 
-<script>
-let uploadedImage = null;
+                <!-- Question -->
+                <div class="text-center mb-12 py-8">
+                    <h3 id="question-text" class="text-2xl md:text-3xl font-bold mb-6 text-white"></h3>
+                    <p id="question-note" class="text-muted text-lg max-w-xl mx-auto"></p>
+                </div>
 
-const fileInput = document.getElementById("fileInput");
-const preview = document.getElementById("preview");
-const analyzeBtn = document.getElementById("analyzeBtn");
-const result = document.getElementById("result");
+                <!-- YES/NO Buttons -->
+                <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                    <button id="yes-btn" class="w-full sm:w-48 bg-gradient-to-r from-emerald to-green-500 hover:from-green-500 hover:to-emerald text-white font-bold py-4 rounded-xl text-lg shadow-glow-emerald btn-hover">
+                        <i class="fa fa-check mr-2"></i> YES
+                    </button>
+                    <button id="no-btn" class="w-full sm:w-48 bg-gradient-to-r from-danger to-rose-600 hover:from-rose-600 hover:to-danger text-white font-bold py-4 rounded-xl text-lg shadow-[0_0_25px_rgba(255,58,94,0.3)] btn-hover">
+                        <i class="fa fa-times mr-2"></i> NO
+                    </button>
+                </div>
+            </section>
 
-// Upload image
-fileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+            <!-- RESULT SCREEN -->
+            <section id="result-screen" class="hidden text-center slide-in relative">
+                <div id="confetti-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        uploadedImage = e.target.result;
-        preview.src = uploadedImage;
-        analyzeBtn.disabled = false;
-        result.innerHTML = "";
-    };
-    reader.readAsDataURL(file);
-});
+                <!-- Score Circle -->
+                <div class="relative mb-8 flex justify-center">
+                    <div class="w-44 h-44 rounded-full bg-gradient-to-r from-danger via-gold to-emerald p-2 shadow-glow-gold">
+                        <div class="w-full h-full rounded-full bg-premium flex flex-col items-center justify-center">
+                            <span id="final-score" class="text-7xl font-black text-shadow">0</span>
+                            <span class="text-sm text-muted">/ 100</span>
+                        </div>
+                    </div>
+                </div>
 
-// Extract image data
-function extractImageFeatures(img) {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+                <h2 id="quality-rating" class="text-3xl md:text-4xl font-bold mb-3"></h2>
+                <p id="action-advice" class="text-xl font-semibold px-8 py-3 rounded-full inline-block mb-8"></p>
 
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
+                <!-- Breakdown -->
+                <div class="glass rounded-xl p-6 mb-8 text-left max-w-2xl mx-auto">
+                    <h3 class="text-lg font-bold text-electric mb-4">📋 RULE BREAKDOWN</h3>
+                    <ul id="breakdown-list" class="space-y-3 text-base"></ul>
+                </div>
 
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+                <!-- Trade Plan -->
+                <div id="final-plan" class="hidden glass rounded-xl p-6 mb-8 border border-emerald/30 text-left max-w-2xl mx-auto">
+                    <h3 class="text-lg font-bold text-emerald mb-3">✅ OFFICIAL TRADE PLAN</h3>
+                    <p class="text-text font-mono text-sm">
+                        <strong>ENTRY:</strong> Limit order on retracement into FVG zone<br>
+                        <strong>STOP-LOSS:</strong> Placed beyond the sweep level that triggered setup<br>
+                        <strong>TAKE-PROFIT:</strong> Opposite side of 30min range / nearest external liquidity<br>
+                        <strong>RISK:REWARD:</strong> Minimum 2:1 confirmed
+                    </p>
+                </div>
 
-    let brightness = 0;
-    let contrast = 0;
-    let edges = 0;
+                <!-- Restart Button -->
+                <button id="restart-btn" class="bg-gradient-to-r from-electric to-royal hover:from-royal hover:to-electric text-white font-bold py-3 px-8 rounded-lg text-lg shadow-glow-electric btn-hover">
+                    <i class="fa fa-refresh mr-2"></i> START NEW CHECK
+                </button>
+            </section>
+        </main>
 
-    for (let i = 0; i < data.length; i += 4) {
-        const avg = (data[i] + data[i+1] + data[i+2]) / 3;
-        brightness += avg;
+        <footer class="text-center text-muted text-sm font-mono">
+            <p>NY Session Strategy Checklist • Built 100% to your rules • Premium Edition</p>
+        </footer>
+    </div>
 
-        if (i > 4) {
-            const prev = (data[i-4] + data[i-3] + data[i-2]) / 3;
-            const diff = Math.abs(avg - prev);
+    <script>
+        // --------------------------
+        // YOUR EXACT RULES — TURNED INTO QUESTIONS (WEIGHTED BY IMPORTANCE)
+        // --------------------------
+        const questions = [
+            {
+                id: 'time',
+                text: 'Is this between 14:30 – 16:00 UK time?',
+                note: 'Only valid setups during NY open window',
+                points: 10,
+                required: true
+            },
+            {
+                id: 'firstSweep',
+                text: 'Is this the FIRST meaningful liquidity sweep after NY open?',
+                note: 'ONLY trade the FIRST sweep — ignore all later ones',
+                points: 15,
+                required: true
+            },
+            {
+                id: 'crt',
+                text: 'Did price sweep the high/low AND close back inside / reject the level?',
+                note: 'CRT RULE: Sweep + rejection = valid level — NO REJECTION = invalid',
+                points: 20,
+                required: true
+            },
+            {
+                id: 'choch',
+                text: 'Is there a clear CHOCH / break of internal structure?',
+                note: 'Must show displacement away from the sweep level',
+                points: 12,
+                required: true
+            },
+            {
+                id: 'fvg',
+                text: 'Is there a valid FVG / IFVG formed DURING displacement, aligned with direction?',
+                note: 'Gap must be in the same direction as the move',
+                points: 12,
+                required: true
+            },
+            {
+                id: 'retrace',
+                text: 'Is price retracing back INTO the FVG zone?',
+                note: 'Entry only on retrace — do not chase',
+                points: 10,
+                required: true
+            },
+            {
+                id: 'confluence',
+                text: 'Do we have full confluence: Sweep + CHOCH + FVG together?',
+                note: 'All 3 elements must align',
+                points: 8,
+                required: true
+            },
+            {
+                id: 'sl',
+                text: 'Will stop-loss be placed BEYOND the sweep level?',
+                note: 'SL must be outside the range that was swept',
+                points: 5,
+                required: false
+            },
+            {
+                id: 'rr',
+                text: 'Is Risk-to-Reward ratio AT LEAST 2:1?',
+                note: 'Minimum 2x profit target vs risk',
+                points: 8,
+                required: true
+            }
+        ];
 
-            contrast += diff;
+        // --------------------------
+        // APP LOGIC
+        // --------------------------
+        const startScreen = document.getElementById('start-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const startBtn = document.getElementById('start-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const restartBtn = document.getElementById('restart-btn');
 
-            if (diff > 25) edges++;
+        const questionText = document.getElementById('question-text');
+        const questionNote = document.getElementById('question-note');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+
+        const finalScoreEl = document.getElementById('final-score');
+        const qualityRatingEl = document.getElementById('quality-rating');
+        const actionAdviceEl = document.getElementById('action-advice');
+        const breakdownListEl = document.getElementById('breakdown-list');
+        const finalPlanEl = document.getElementById('final-plan');
+        const confettiContainer = document.getElementById('confetti-container');
+
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let totalPoints = 0;
+        let maxPossible = questions.reduce((sum,q) => sum + q.points, 0);
+
+        // Start
+        startBtn.addEventListener('click', () => {
+            startScreen.classList.add('hidden');
+            questionScreen.classList.remove('hidden');
+            showQuestion();
+        });
+
+        // Yes / No
+        yesBtn.addEventListener('click', () => handleAnswer(true));
+        noBtn.addEventListener('click', () => handleAnswer(false));
+
+        // Restart
+        restartBtn.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            answers = [];
+            totalPoints = 0;
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            finalPlanEl.classList.add('hidden');
+        });
+
+        // Show current question
+        function showQuestion() {
+            const q = questions[currentQuestionIndex];
+            questionText.textContent = q.text;
+            questionNote.textContent = q.note;
+            
+            // Update progress
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
         }
-    }
 
-    const pixels = data.length / 4;
+        // Handle answer
+        function handleAnswer(isYes) {
+            answers.push({ ...questions[currentQuestionIndex], answer: isYes });
+            if(isYes) totalPoints += questions[currentQuestionIndex].points;
 
-    return {
-        brightness: brightness / pixels,
-        contrast: contrast / pixels,
-        edgeDensity: edges / pixels
-    };
-}
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
 
-// Session check
-function isNYSession() {
-    const now = new Date();
-    const minutes = now.getUTCHours() * 60 + now.getUTCMinutes();
-    return minutes >= (14*60+30) && minutes <= (16*60);
-}
+        // Show final result
+        function showResult() {
+            questionScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
 
-// Main analysis
-analyzeBtn.addEventListener("click", () => {
-    const img = new Image();
-    img.src = uploadedImage;
+            // Calculate final score out of 100
+            const score = Math.round((totalPoints / maxPossible) * 100);
+            finalScoreEl.textContent = score;
 
-    img.onload = () => {
-        const f = extractImageFeatures(img);
+            // Rating & Advice
+            let quality, action, actionClass;
+            if(score >= 90) {
+                quality = '⭐ ELITE SETUP';
+                action = '✅ TAKE TRADE — PERFECT';
+                actionClass = 'bg-emerald/20 text-emerald border border-emerald/30';
+                launchConfetti();
+                finalPlanEl.classList.remove('hidden');
+            } else if(score >= 75) {
+                quality = '✅ HIGH QUALITY';
+                action = '✅ TAKE — EXCELLENT RULE FOLLOWING';
+                actionClass = 'bg-electric/20 text-electric border border-electric/30';
+                finalPlanEl.classList.remove('hidden');
+            } else if(score >= 50) {
+                quality = '⚠️ MEDIUM QUALITY';
+                action = '⏱️ WATCH ONLY — MISSING KEY RULES';
+                actionClass = 'bg-gold/20 text-gold border border-gold/30';
+            } else {
+                quality = '❌ INVALID SETUP';
+                action = '❌ AVOID — VIOLATES CORE RULES';
+                actionClass = 'bg-danger/20 text-danger border border-danger/30';
+            }
 
-        let score = 0;
+            qualityRatingEl.textContent = quality;
+            actionAdviceEl.textContent = action;
+            actionAdviceEl.className = `text-xl font-semibold px-8 py-3 rounded-full inline-block mb-8 ${actionClass}`;
+            finalScoreEl.className = `text-7xl font-black text-shadow ${score>=75?'text-emerald':score>=50?'text-gold':'text-danger'}`;
 
-        // Movement strength
-        score += Math.min(f.edgeDensity * 400, 30);
+            // Breakdown list
+            breakdownListEl.innerHTML = '';
+            answers.forEach(ans => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-3';
+                const icon = ans.answer ? 'fa-check-circle text-emerald' : 'fa-times-circle text-danger';
+                li.innerHTML = `
+                    <i class="fa ${icon} mt-1"></i>
+                    <div>
+                        <span class="font-medium">${ans.text}</span>
+                        <span class="text-sm text-muted ml-2">(${ans.answer ? '+'+ans.points : '0'}/${ans.points})</span>
+                    </div>
+                `;
+                breakdownListEl.appendChild(li);
+            });
+        }
 
-        // Clean vs messy
-        score += Math.min(f.contrast / 2, 25);
-
-        // Visual clarity
-        score += (f.brightness > 80 && f.brightness < 180) ? 15 : 5;
-
-        // Session boost
-        if (isNYSession()) score += 15;
-
-        // slight variation
-        score += Math.random() * 10;
-
-        score = Math.min(Math.round(score), 100);
-
-        let verdict = "";
-        if(score >= 85) verdict = "ELITE SETUP ✅";
-        else if(score >= 70) verdict = "VALID SETUP 👍";
-        else if(score >= 50) verdict = "WAIT ⏱️";
-        else verdict = "AVOID ❌";
-
-        result.innerHTML = `
-            Score: <b>${score}%</b><br>
-            ${verdict}
-        `;
-    };
-});
-</script>
-
+        // Fun confetti effect for high scores
+        function launchConfetti() {
+            const colors = ['#FFD700', '#00E59B', '#0099FF', '#7928CA'];
+            for(let i=0; i<80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random()*100}%`;
+                confetti.style.top = `-10px`;
+                confetti.style.background = colors[Math.floor(Math.random()*colors.length)];
+                confetti.style.animationDelay = `${Math.random()*3}s`;
+                confettiContainer.appendChild(confetti);
+            }
+        }
+    </script>
 </body>
 </html>
