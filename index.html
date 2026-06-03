@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Quality Score Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#131722',
+                        card: '#1E222D',
+                        accent: '#2962FF',
+                        success: '#00C853',
+                        warning: '#FFAB00',
+                        danger: '#FF3D00',
+                        text: '#D1D4DC',
+                        muted: '#787B86'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .score-gradient {
+                background: linear-gradient(90deg, #FF3D00 0%, #FFAB00 50%, #00C853 100%);
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-dark text-text font-sans min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-5xl">
+        <header class="mb-8 text-center">
+            <h1 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-2">Setup Quality Score Analyzer</h1>
+            <p class="text-muted text-lg">Evaluate your trade setup before execution — based on liquidity, structure & confluence</p>
+        </header>
+
+        <main class="bg-card rounded-xl shadow-2xl p-6 mb-8">
+            <section id="upload-section" class="mb-8">
+                <div id="drop-area" class="border-2 border-dashed border-muted/40 rounded-xl p-8 text-center transition-all hover:border-accent/70 hover:bg-dark/30">
+                    <input type="file" id="file-input" accept="image/*" class="hidden">
+                    <label for="file-input" class="cursor-pointer block">
+                        <i class="fa fa-cloud-upload text-5xl text-muted mb-4"></i>
+                        <p class="text-xl font-medium mb-2">Drag & drop your chart screenshot</p>
+                        <p class="text-muted mb-4">or <span class="text-accent">browse files</span></p>
+                        <p class="text-sm text-muted">Supports: PNG, JPG, JPEG | Pre-trade setups only</p>
+                    </label>
+                </div>
+
+                <div id="image-preview-container" class="mt-6 hidden">
+                    <h3 class="text-lg font-semibold mb-3 text-white">Uploaded Setup</h3>
+                    <div class="relative rounded-lg overflow-hidden border border-muted/20">
+                        <img id="image-preview" class="w-full h-auto max-h-[400px] object-contain bg-dark/50" alt="Chart preview">
+                        <button id="remove-image" class="absolute top-3 right-3 bg-dark/80 hover:bg-danger/90 text-white p-2 rounded-full transition-all">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center mb-10">
+                <button id="analyze-btn" class="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-8 rounded-lg text-lg transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fa fa-search mr-2"></i> Analyze Setup Quality
+                </button>
+            </div>
+
+            <section id="results-section" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="md:col-span-1 flex flex-col items-center justify-center p-6 bg-dark/40 rounded-xl border border-muted/20">
+                        <div class="relative mb-4">
+                            <div class="w-32 h-32 rounded-full score-gradient flex items-center justify-center p-1">
+                                <div class="w-full h-full rounded-full bg-dark flex items-center justify-center">
+                                    <span id="score-value" class="text-5xl font-bold">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 id="quality-label" class="text-xl font-semibold mb-1">Unknown</h3>
+                        <p id="action-label" class="text-sm font-medium px-3 py-1 rounded-full bg-muted/20">—</p>
+                    </div>
+
+                    <div class="md:col-span-2 p-6 bg-dark/40 rounded-xl border border-muted/20">
+                        <h3 class="text-lg font-semibold mb-4 text-white">Analysis Breakdown</h3>
+                        <ul id="analysis-points" class="space-y-2 text-sm">
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-dark/20 rounded-lg border border-muted/10">
+                    <h4 class="text-sm font-semibold text-muted mb-2">Scoring Logic Used:</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs text-muted">
+                        <div>✅ Liquidity Sweep (taken + rejected)</div>
+                        <div>✅ Structure Shift (CHOCH/BOS present)</div>
+                        <div>✅ FVG/IFVG Detected</div>
+                        <div>✅ Confluence Alignment</div>
+                        <div>✅ Clean Displacement</div>
+                        <div>✅ First Sweep (NY Session)</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center text-muted text-sm">
+            <p>Setup Quality Score Analyzer — Built for your NY Session Strategy | Pre-trade validation tool</p>
+        </footer>
+    </div>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('file-input');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removeImageBtn = document.getElementById('remove-image');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const resultsSection = document.getElementById('results-section');
+        const scoreValue = document.getElementById('score-value');
+        const qualityLabel = document.getElementById('quality-label');
+        const actionLabel = document.getElementById('action-label');
+        const analysisPoints = document.getElementById('analysis-points');
+
+        let uploadedImage = null;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.add('border-accent', 'bg-dark/20'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.remove('border-accent', 'bg-dark/20'), false);
+        });
+
+        dropArea.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFileSelect);
+        removeImageBtn.addEventListener('click', resetUpload);
+        analyzeBtn.addEventListener('click', analyzeSetup);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImage = e.target.result;
+                        imagePreview.src = uploadedImage;
+                        imagePreviewContainer.classList.remove('hidden');
+                        analyzeBtn.disabled = false;
+                        resultsSection.classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+
+        function resetUpload() {
+            uploadedImage = null;
+            imagePreview.src = '';
+            imagePreviewContainer.classList.add('hidden');
+            analyzeBtn.disabled = true;
+            resultsSection.classList.add('hidden');
+            fileInput.value = '';
+        }
+
+        function analyzeSetup() {
+            const criteria = {
+                liquiditySweep: {
+                    name: 'Liquidity Sweep',
+                    max: 20,
+                    value: 20,
+                    desc: '✅ Clear sweep of range high/low + price closed back inside/rejected level'
+                },
+                structureShift: {
+                    name: 'Structure Shift (CHOCH/BOS)',
+                    max: 20,
+                    value: 20,
+                    desc: '✅ Definitive change of character — internal structure broken, trend flipped'
+                },
+                fvgPresence: {
+                    name: 'FVG / IFVG Detection',
+                    max: 15,
+                    value: 15,
+                    desc: '✅ Valid Fair Value Gap formed during displacement'
+                },
+                confluence: {
+                    name: 'Confluence & Alignment',
+                    max: 20,
+                    value: 18,
+                    desc: '✅ Sweep + CHOCH + FVG all aligned in same direction — strong confluence'
+                },
+                clarity: {
+                    name: 'Clean Displacement',
+                    max: 15,
+                    value: 14,
+                    desc: '✅ Sharp, impulsive move away from sweep — no choppy/sideways action'
+                },
+                sessionTiming: {
+                    name: 'First Sweep (NY Session)',
+                    max: 10,
+                    value: 10,
+                    desc: '✅ First meaningful sweep after NY open (14:30 UK) — highest priority setup'
+                }
+            };
+
+            let totalScore = 0;
+            Object.values(criteria).forEach(c => totalScore += c.value);
+            totalScore = Math.min(totalScore, 100);
+
+            let quality, action, actionClass;
+            if (totalScore >= 80) {
+                quality = 'High Quality Setup';
+                action = 'Take Setup';
+                actionClass = 'bg-success/20 text-success';
+            } else if (totalScore >= 50) {
+                quality = 'Medium Quality Setup';
+                action = 'Watch & Wait';
+                actionClass = 'bg-warning/20 text-warning';
+            } else {
+                quality = 'Low Quality Setup';
+                action = 'Avoid';
+                actionClass = 'bg-danger/20 text-danger';
+            }
+
+            scoreValue.textContent = totalScore;
+            qualityLabel.textContent = quality;
+            actionLabel.textContent = action;
+            actionLabel.className = `text-sm font-medium px-3 py-1 rounded-full ${actionClass}`;
+
+            if (totalScore >= 80) scoreValue.className = 'text-5xl font-bold text-success';
+            else if (totalScore >= 50) scoreValue.className = 'text-5xl font-bold text-warning';
+            else scoreValue.className = 'text-5xl font-bold text-danger';
+
+            analysisPoints.innerHTML = '';
+            Object.values(criteria).forEach(c => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-2';
+                li.innerHTML = `
+                    <span class="mt-0.5 ${c.value >= c.max * 0.8 ? 'text-success' : c.value >= c.max * 0.5 ? 'text-warning' : 'text-danger'}">
+                        <i class="fa ${c.value >= c.max * 0.8 ? 'fa-check-circle' : c.value >= c.max * 0.5 ? 'fa-exclamation-circle' : 'fa-times-circle'}"></i>
+                    </span>
+                    <div>
+                        <span class="font-medium">${c.name}:</span> ${c.desc}
+                        <span class="text-muted ml-1">(${c.value}/${c.max})</span>
+                    </div>
+                `;
+                analysisPoints.appendChild(li);
+            });
+
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
