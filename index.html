@@ -1,7 +1,89 @@
-<!-- ONLY showing the NEW script section to keep it clean -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NY Session AI Analyzer</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    background: #05050F;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background: linear-gradient(to right, #00F0FF, #7928CA);
+    border: none;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+button:disabled {
+    opacity: 0.4;
+}
+img {
+    max-width: 100%;
+    margin-top: 20px;
+}
+.result {
+    margin-top: 30px;
+    font-size: 24px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>NY Session AI Analyzer</h1>
+
+    <input type="file" id="fileInput" accept="image/*">
+    
+    <div>
+        <img id="preview" />
+    </div>
+
+    <br>
+
+    <button id="analyzeBtn" disabled>Run Analysis</button>
+
+    <div class="result" id="result"></div>
+</div>
+
 <script>
 let uploadedImage = null;
 
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const result = document.getElementById("result");
+
+// Upload image
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        uploadedImage = e.target.result;
+        preview.src = uploadedImage;
+        analyzeBtn.disabled = false;
+        result.innerHTML = "";
+    };
+    reader.readAsDataURL(file);
+});
+
+// Extract image data
 function extractImageFeatures(img) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -22,9 +104,11 @@ function extractImageFeatures(img) {
 
         if (i > 4) {
             const prev = (data[i-4] + data[i-3] + data[i-2]) / 3;
-            contrast += Math.abs(avg - prev);
+            const diff = Math.abs(avg - prev);
 
-            if (Math.abs(avg - prev) > 25) edges++;
+            contrast += diff;
+
+            if (diff > 25) edges++;
         }
     }
 
@@ -37,64 +121,53 @@ function extractImageFeatures(img) {
     };
 }
 
-function runAIAnalysis() {
+// Session check
+function isNYSession() {
+    const now = new Date();
+    const minutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+    return minutes >= (14*60+30) && minutes <= (16*60);
+}
+
+// Main analysis
+analyzeBtn.addEventListener("click", () => {
     const img = new Image();
     img.src = uploadedImage;
 
     img.onload = () => {
         const f = extractImageFeatures(img);
 
-        // 🧠 Smart scoring model
         let score = 0;
 
-        // Structure intensity (edges = volatility / movement)
+        // Movement strength
         score += Math.min(f.edgeDensity * 400, 30);
 
-        // Contrast (clean moves vs messy chop)
+        // Clean vs messy
         score += Math.min(f.contrast / 2, 25);
 
-        // Brightness normalization (avoid washed charts)
+        // Visual clarity
         score += (f.brightness > 80 && f.brightness < 180) ? 15 : 5;
 
-        // Random micro variation (simulate AI nuance)
-        score += Math.random() * 15;
+        // Session boost
+        if (isNYSession()) score += 15;
 
-        // Session bonus
-        if (marketData.inSession) score += 15;
+        // slight variation
+        score += Math.random() * 10;
 
         score = Math.min(Math.round(score), 100);
 
-        // 🧠 Decision logic
-        let quality, action, actionClass;
+        let verdict = "";
+        if(score >= 85) verdict = "ELITE SETUP ✅";
+        else if(score >= 70) verdict = "VALID SETUP 👍";
+        else if(score >= 50) verdict = "WAIT ⏱️";
+        else verdict = "AVOID ❌";
 
-        if(score >= 85) {
-            quality = '⭐ ELITE SETUP';
-            action = '✅ TAKE TRADE';
-            actionClass = 'bg-success/20 text-success';
-        } 
-        else if(score >= 70) {
-            quality = '✅ HIGH QUALITY';
-            action = '✅ VALID SETUP';
-            actionClass = 'bg-ai/20 text-ai';
-        } 
-        else if(score >= 50) {
-            quality = '⚠️ MID QUALITY';
-            action = '⏱️ WAIT';
-            actionClass = 'bg-warning/20 text-warning';
-        } 
-        else {
-            quality = '❌ LOW QUALITY';
-            action = '❌ AVOID';
-            actionClass = 'bg-danger/20 text-danger';
-        }
-
-        // UI update
-        scoreValue.textContent = score;
-        qualityLabel.textContent = quality;
-        actionLabel.textContent = action;
-        actionLabel.className = `text-base font-semibold px-4 py-2 rounded-full ${actionClass}`;
-
-        resultsSection.classList.remove('hidden');
+        result.innerHTML = `
+            Score: <b>${score}%</b><br>
+            ${verdict}
+        `;
     };
-}
+});
 </script>
+
+</body>
+</html>
